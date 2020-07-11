@@ -1,7 +1,7 @@
-package download;
+package download.de;
 
 import com.google.gson.JsonArray;
-import download.de.DE_Distribution;
+import download.AbstractDistributionTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -12,8 +12,8 @@ import protobuf.TemporaryExposureKeyExport;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;

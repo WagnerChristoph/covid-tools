@@ -4,13 +4,14 @@ import app.coronawarn.server.common.protocols.external.exposurenotification.Temp
 import com.google.protobuf.InvalidProtocolBufferException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import retrofit2.Call;
+import retrofit2.Response;
 import util.ZipUtils;
 
 import java.io.IOException;
@@ -64,6 +65,25 @@ public abstract class AbstractDistribution {
 //		}
 //		return Optional.ofNullable(keys);
 //	}
+
+
+	public <T> void  executeRequest2(Call<T> call, Callback<Response<T>> callback) {
+		//logger.debug("requesting: {}", url);
+
+		try (Response<T> response = call.execute()) {
+			if (response.isSuccessful()) {
+				logger.debug("received response successfully");
+				callback.onSuccess(response);
+			}
+			else{
+				logger.error("unsuccessful response: {}", response.code());
+			}
+		} catch (IOException e) {
+//			logger.error(e.getMessage());
+			callback.onError(e);
+		}
+
+	}
 
 
 	public void executeRequest(String url, Callback<Response> callback) {

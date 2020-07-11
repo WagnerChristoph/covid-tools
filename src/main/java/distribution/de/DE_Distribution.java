@@ -2,6 +2,7 @@ package distribution.de;
 
 import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import com.google.common.collect.Streams;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import distribution.AbstractDistribution;
@@ -13,6 +14,8 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -32,6 +35,7 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 
 	private static final Logger logger = LogManager.getLogger(DE_Distribution.class);
 	private final String baseUrl;
+	private final DistributionService distributionService;
 
 	public DE_Distribution() {
 		this(BASE_URL);
@@ -39,6 +43,11 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 
 	public DE_Distribution(String baseUrl) {
 		this.baseUrl = baseUrl;
+		final Retrofit retrofit = new Retrofit.Builder()
+				//add Gson/JsonConverter?
+				.baseUrl(baseUrl)
+				.build();
+		this.distributionService = retrofit.create(DistributionService.class);
 	}
 
 	@Override
@@ -63,6 +72,8 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 	public List<LocalDate> getAvailableDays(String country) {
 		final String url = getAvailableDaysUrl(DEFAULT_VERSION, country);
 		logger.debug("requesting available days");
+
+		final Call<JsonArray> call = distributionService.getAvailableDays(DEFAULT_VERSION, country);
 		return getAvailableDates(url).stream()
 									 .map(dateString -> LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE))
 									 .collect(Collectors.toList());
@@ -110,6 +121,13 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 		}
 
 		return list;
+	}
+
+	private List<String> getAvailableDates2(Call<JsonArray> call) {
+
+
+		final retrofit2.Response<JsonArray> execute = call.execute();
+
 	}
 
 	private List<String> getAvailableDates(String url) {

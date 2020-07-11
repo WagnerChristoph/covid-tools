@@ -182,6 +182,7 @@ public class TEKExport {
 		}
 
 
+		//todo: deprecate transmission risk level
 		public static TEK fromProtobuf(TemporaryExposureKey tek) {
 			return new TEK(
 					tek.hasKeyData() ? new String(Hex.encodeHex(tek.getKeyData().asReadOnlyByteBuffer())) : "",

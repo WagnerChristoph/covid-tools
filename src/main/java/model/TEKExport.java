@@ -11,7 +11,6 @@ import protobuf.TemporaryExposureKeyExport;
 import util.ENIntervalNumberUtils;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static protobuf.TemporaryExposureKey.*;
 
 public class TEKExport {
 	public static final DateTimeFormatter DEFAULT_DATE_FORMATTER = ISO_LOCAL_DATE;
@@ -73,13 +73,18 @@ public class TEKExport {
 	@SerializedName("keys")
 	private final List<TEK> keys;
 
-	public TEKExport(@Nullable LocalDate day, @Nullable LocalDateTime startDate, @Nullable LocalDateTime endDate, String region, int num_keys, List<TEK> keys) {
+	@SerializedName("revised_keys")
+	private final List<TEK> revisedKeys;
+
+
+	public TEKExport(@Nullable LocalDate day, @Nullable LocalDateTime startDate, @Nullable LocalDateTime endDate, String region, int num_keys, List<TEK> keys, List<TEK> revisedKeys) {
 		this.day = day;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.region = Objects.requireNonNullElse(region, "");
 		this.num_keys = num_keys;
 		this.keys = new LinkedList<>(keys);
+		this.revisedKeys = new LinkedList<>(revisedKeys);
 	}
 
 	@Nullable
@@ -109,6 +114,10 @@ public class TEKExport {
 		return new LinkedList<>(keys);
 	}
 
+	public List<TEK> getRevisedKeys() {
+		return new LinkedList<>(revisedKeys);
+	}
+
 	public static TEKExport fromProtobuf(TemporaryExposureKeyExport tekExport, @Nullable LocalDate day){
 		return new TEKExport(
 				day,
@@ -118,7 +127,10 @@ public class TEKExport {
 				tekExport.getKeysCount(),
 				tekExport.getKeysList().stream()
 						 .map(TEK::fromProtobuf)
-						 .collect(Collectors.toList()));
+						 .collect(Collectors.toList()),
+				tekExport.getRevisedKeysList().stream()
+						.map(TEK::fromProtobuf)
+						.collect(Collectors.toList()));
 	}
 
 
@@ -132,12 +144,13 @@ public class TEKExport {
 				Objects.equals(startDate, tekExport.startDate) &&
 				Objects.equals(endDate, tekExport.endDate) &&
 				region.equals(tekExport.region) &&
-				keys.equals(tekExport.keys);
+				keys.equals(tekExport.keys) &&
+				revisedKeys.equals(tekExport.revisedKeys);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(day, startDate, endDate, region, num_keys, keys);
+		return Objects.hash(day, startDate, endDate, region, num_keys, keys, revisedKeys);
 	}
 
 	public static class TEK {
@@ -155,13 +168,22 @@ public class TEKExport {
 		@SerializedName("day")
 		private final LocalDate day;
 
+		@Nullable
+		@SerializedName("report_type")
+		private final ReportType reportType;
+
+		@SerializedName("days_since_onset_of_symptoms")
+		private final int daysSinceOnsetOfSymtoms;
 
 
-		public TEK(String keyData, int transmissionRiskLevel, int rollingStartIntervalNumber, @Nullable LocalDate day) {
+
+		public TEK(String keyData, int transmissionRiskLevel, int rollingStartIntervalNumber, @Nullable LocalDate day, @Nullable ReportType reportType, int daysSinceOnsetOfSymtoms) {
 			this.keyData = Objects.requireNonNullElse(keyData, "");
 			this.transmissionRiskLevel = transmissionRiskLevel;
 			this.rollingStartIntervalNumber = rollingStartIntervalNumber;
 			this.day = day;
+			this.reportType = reportType;
+			this.daysSinceOnsetOfSymtoms = daysSinceOnsetOfSymtoms;
 		}
 
 		public String getKeyData() {
@@ -181,16 +203,6 @@ public class TEKExport {
 			return day;
 		}
 
-
-		//todo: deprecate transmission risk level
-		public static TEK fromProtobuf(TemporaryExposureKey tek) {
-			return new TEK(
-					tek.hasKeyData() ? new String(Hex.encodeHex(tek.getKeyData().asReadOnlyByteBuffer())) : "",
-					tek.hasTransmissionRiskLevel() ? tek.getTransmissionRiskLevel() : -1,
-					tek.hasRollingStartIntervalNumber() ? tek.getRollingStartIntervalNumber() : -1,
-					tek.hasRollingStartIntervalNumber() ?  LocalDate.ofInstant(ENIntervalNumberUtils.getUnixTimeInstant(tek.getRollingStartIntervalNumber()), UTC) : null);
-		}
-
 		@Override
 		public boolean equals(Object o) {
 			if (this == o) return true;
@@ -198,14 +210,37 @@ public class TEKExport {
 			TEK tek = (TEK) o;
 			return transmissionRiskLevel == tek.transmissionRiskLevel &&
 					rollingStartIntervalNumber == tek.rollingStartIntervalNumber &&
+					daysSinceOnsetOfSymtoms == tek.daysSinceOnsetOfSymtoms &&
 					keyData.equals(tek.keyData) &&
-					Objects.equals(day, tek.day);
+					Objects.equals(day, tek.day) &&
+					reportType == tek.reportType;
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(keyData, transmissionRiskLevel, rollingStartIntervalNumber, day);
+			return Objects.hash(keyData, transmissionRiskLevel, rollingStartIntervalNumber, day, reportType, daysSinceOnsetOfSymtoms);
 		}
+
+		@Nullable
+		public ReportType getReportType() {
+			return reportType;
+		}
+
+		public int getDaysSinceOnsetOfSymtoms() {
+			return daysSinceOnsetOfSymtoms;
+		}
+
+		//todo: deprecate transmission risk level
+		public static TEK fromProtobuf(TemporaryExposureKey tek) {
+			return new TEK(
+					tek.hasKeyData() ? new String(Hex.encodeHex(tek.getKeyData().asReadOnlyByteBuffer())) : "",
+					tek.hasTransmissionRiskLevel() ? tek.getTransmissionRiskLevel() : -1,
+					tek.hasRollingStartIntervalNumber() ? tek.getRollingStartIntervalNumber() : -1,
+					tek.hasRollingStartIntervalNumber() ?  LocalDate.ofInstant(ENIntervalNumberUtils.getUnixTimeInstant(tek.getRollingStartIntervalNumber()), UTC) : null,
+					tek.hasReportType() ? tek.getReportType() : null,
+					tek.hasDaysSinceOnsetOfSymptoms() ? tek.getDaysSinceOnsetOfSymptoms() : -1);
+		}
+
 	}
 
 

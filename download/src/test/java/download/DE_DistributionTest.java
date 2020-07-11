@@ -1,7 +1,6 @@
 package download;
 
 import com.google.gson.JsonArray;
-import download.AbstractDistributionTest;
 import download.de.DE_Distribution;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -13,8 +12,8 @@ import protobuf.TemporaryExposureKeyExport;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +40,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getAvailableDays() throws InterruptedException{
+	void testGetAvailableDays() throws InterruptedException{
 		List<LocalDate> days = List.of(EXAMPLE_DATE,
 				EXAMPLE_DATE.plusDays(1),
 				EXAMPLE_DATE.plusDays(2),
@@ -61,7 +60,7 @@ class DE_DistributionTest {
 
 
 	@Test
-	void getAvailableDays_Empty() {
+	void testGetAvailableDays_Empty() {
 		mockServer.enqueue(new MockResponse().setBody(new JsonArray().toString()));
 		final List<LocalDate> actual = dist.getAvailableDays();
 
@@ -69,7 +68,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getAvailableDays_NotFound() {
+	void testGetAvailableDays_NotFound() {
 		mockServer.enqueue(new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND));
 		final List<LocalDate> actual = dist.getAvailableDays();
 
@@ -78,7 +77,7 @@ class DE_DistributionTest {
 
 
 	@Test
-	void getAvailableHours() throws InterruptedException {
+	void testGetAvailableHours() throws InterruptedException {
 		List<Integer> hours = List.of(1, 10, 15, 23);
 		final JsonArray jsonDateArr = new JsonArray();
 		hours.forEach(jsonDateArr::add);
@@ -91,7 +90,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getAvailableHours_Empty() {
+	void testGetAvailableHours_Empty() {
 		mockServer.enqueue(new MockResponse().setBody(new JsonArray().toString()));
 		final List<LocalDateTime> actual = dist.getAvailableHours(EXAMPLE_DATE);
 
@@ -99,7 +98,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getAvailableHours_NotFound() {
+	void testGetAvailableHours_NotFound() {
 		mockServer.enqueue(new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND));
 		final List<LocalDateTime> actual = dist.getAvailableHours(EXAMPLE_DATE);
 
@@ -107,7 +106,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getDiagnosisKeyForDay() throws IOException, InterruptedException {
+	void testGetDiagnosisKeyForDay() throws IOException, InterruptedException {
 		mockServer.enqueue(AbstractDistributionTest.getDiagnosisKeysTestFileMockResponse());
 		final TemporaryExposureKeyExport tekExport = dist.getDiagnosisKeysForDay(EXAMPLE_DATE).orElseThrow();
 
@@ -116,7 +115,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getDiagnosisKeyForDay_NotFound() {
+	void testGetDiagnosisKeyForDay_NotFound() {
 		mockServer.enqueue(new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND));
 		final Optional<TemporaryExposureKeyExport> optional = dist.getDiagnosisKeysForDay(EXAMPLE_DATE);
 
@@ -124,7 +123,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getDiagnosisKeyForHour() throws IOException, InterruptedException {
+	void testGetDiagnosisKeyForHour() throws IOException, InterruptedException {
 		mockServer.enqueue(AbstractDistributionTest.getDiagnosisKeysTestFileMockResponse());
 		final TemporaryExposureKeyExport tekExport = dist.getDiagnosisKeysForHour(EXAMPLE_DATE_TIME).orElseThrow();
 
@@ -133,7 +132,7 @@ class DE_DistributionTest {
 	}
 
 	@Test
-	void getDiagnosisKeyForHour_NotFound() {
+	void testGetDiagnosisKeyForHour_NotFound() {
 		mockServer.enqueue(new MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND));
 		final Optional<TemporaryExposureKeyExport> optional = dist.getDiagnosisKeysForHour(EXAMPLE_DATE_TIME);
 

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public final class IOUtils {
+public class IOUtils {
 	public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	private static final Logger logger = LogManager.getLogger(IOUtils.class);
@@ -33,7 +33,7 @@ public final class IOUtils {
 	private final Gson gson;
 
 
-	public IOUtils(Path keyDir) {
+	IOUtils(Path keyDir) {
 		this.gson = new GsonBuilder()
 				.registerTypeAdapter(LocalDate.class, new TEKExport.LocalDateAdapter().nullSafe())
 				.registerTypeAdapter(LocalDateTime.class, new TEKExport.LocalDateTimeAdapter().nullSafe())
@@ -60,8 +60,7 @@ public final class IOUtils {
 			String filename = formatFilename(entry.getKey());
 			try {
 				Files.writeString(keyDir.resolve(filename),
-						gson.toJson(TEKExport.fromProtobuf(entry.getValue(), entry.getKey())),
-//							TEKExportToJson(entry.getValue(), entry.getKey()).toString(),
+						serializeTEKExport(entry.getValue(), entry.getKey()),
 						StandardOpenOption.CREATE_NEW);
 				successCount++;
 			} catch (IOException e) {
@@ -71,6 +70,10 @@ public final class IOUtils {
 		return successCount;
 	}
 
+	
+	public String serializeTEKExport(TemporaryExposureKeyExport tekExport, LocalDate date) {
+		return gson.toJson(TEKExport.fromProtobuf(tekExport, date));
+	}
 
 	public Optional<TEKExport> safelyDeserialize(Path p) {
 
@@ -112,7 +115,7 @@ public final class IOUtils {
 						   })
 						   .flatMap(Optional::stream)
 						   .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-			logger.debug("found existing dates: {}", filesMap.keySet().stream().map(DEFAULT_DATE_TIME_FORMATTER::format).collect(Collectors.joining(",")));
+			logger.debug("found existing files: {}", filesMap.keySet().stream().map(DEFAULT_DATE_TIME_FORMATTER::format).collect(Collectors.joining(",")));
 		} catch (IOException e) {
 			logger.error("error reading files: {}", e.getMessage());
 		}

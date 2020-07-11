@@ -78,34 +78,6 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 									 .collect(Collectors.toList());
 	}
 
-	private List<String> getAvailableDates_OLD(String url) {
-		List<String> list = new ArrayList<>();
-		logger.debug("requesting date with: {}", url);
-		Request r = new Request.Builder()
-				.get()
-				.url(url)
-				.build();
-		try (Response response = client.newCall(r).execute()) {
-			if (response.isSuccessful()) {
-				if (response.code() != 204) {
-					list = Streams.stream(JsonParser.parseString(response.body()
-																		 .string())
-													.getAsJsonArray()
-													.iterator())
-								  .map(JsonElement::getAsString)
-								  .collect(Collectors.toList());
-				}else{
-					logger.warn("no content found");
-				}
-			}else{
-				logger.error("error in requesting available dates: {}", response.code());
-			}
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
-
-		return list;
-	}
 
 	private List<String> getAvailableDates(String url) {
 		List<String> list = new ArrayList<>();

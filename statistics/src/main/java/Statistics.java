@@ -4,11 +4,15 @@ import util.IOUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 public class Statistics {
 
@@ -21,7 +25,8 @@ public class Statistics {
 
 	public Statistics(String keyDir) {
 		this.keyDir = Paths.get(Objects.requireNonNull(keyDir));
-		ioUtils = new IOUtils(this.keyDir);
+		//todo: add path
+		ioUtils = new IOUtils.IOUtilsFactory().create(Paths.get(""));
 	}
 
 

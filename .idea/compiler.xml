@@ -6,14 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="covid-downloader" />
         <module name="statistics" />
+        <module name="covid-downloader" />
         <module name="download" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="download.main" target="13" />
       <module name="download.test" target="13" />
+      <module name="statistics" target="1.14" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,0 +1,150 @@
+package download;
+
+import joptsimple.AbstractOptionSpec;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import protobuf.TemporaryExposureKeyExport;
+import util.IOUtils;
+import util.IOUtils.IOUtilsFactory;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.naturalOrder;
+
+public class KeyDownloader {
+
+	private static final Logger logger = LogManager.getLogger(KeyDownloader.class);
+
+	//default current working dir
+	private Path baseKeyDir = Paths.get("");
+	private final DistributionFactory distributionFactory;
+	private final IOUtilsFactory ioUtilsFactory;
+
+
+	public KeyDownloader(DistributionFactory distributionFactory, IOUtilsFactory ioUtilsFactory) {
+		this.distributionFactory = distributionFactory;
+		this.ioUtilsFactory = ioUtilsFactory;
+	}
+
+	public KeyDownloader(Path baseKeyDir) {
+		this.baseKeyDir = baseKeyDir;
+		this.distributionFactory = new DistributionFactory();
+		this.ioUtilsFactory = new IOUtilsFactory();
+	}
+
+
+
+	public void downloadCountryKeys(DistributionType type){
+		logger.info("downloading keys for {}", type.toString());
+		downloadKeys(distributionFactory.getDistribution(type), ioUtilsFactory.create(baseKeyDir.resolve(type.toString().toLowerCase())));
+	}
+
+
+
+	public void downloadKeys(@NotNull Distribution distribution, @NotNull IOUtils ioUtils) {
+		final Set<LocalDate> existingDates = ioUtils.getExistingDates().keySet();
+		logger.info("found {} existing files", existingDates.size());
+
+		Set<LocalDate> datesToRequest = getDateToRequest(distribution, existingDates);
+		logger.info("requesting {} new files", datesToRequest.size());
+
+		//request
+		final Map<LocalDate, TemporaryExposureKeyExport> newTEKs = datesToRequest.stream()
+																				 .map(distribution::getDiagnosisKeysForDayWithDay)
+																				 .flatMap(Optional::stream)
+																				 .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+		logger.info("received {} new files", newTEKs.size());
+
+
+		final int newFilecount = ioUtils.persistTEKs(newTEKs);
+		logger.info("wrote {} new files", newFilecount);
+
+	}
+
+	@NotNull
+	private Set<LocalDate> getDateToRequest(Distribution distribution, Set<LocalDate> existingDates) {
+		if(distribution instanceof DaysIndexableDistribution) {
+		//if we can list the available dates, get them
+		final Set<LocalDate> availableDates = new HashSet<>(((DaysIndexableDistribution) distribution).getAvailableDays());
+		logger.info("found {} available dates on server", availableDates.size());
+
+		availableDates.removeAll(existingDates);
+		return availableDates;
+
+		}else {
+			//request from latest existing date on or alternatively last 14 days
+			final LocalDate startingDate = existingDates.stream()
+														  .max(naturalOrder())
+																					//exclusive
+														  .orElse(LocalDate.now().minusDays(14));
+			logger.info("requesting new files from {} on", startingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+			return startingDate
+											//dont include today
+										   .datesUntil(LocalDate.now())
+										   .collect(Collectors.toSet());
+		}
+	}
+
+
+
+	public static void main(String[] args) {
+		//todo config path
+		OptionParser parser = new OptionParser();
+		final OptionSpec<String> countriesOption = parser.acceptsAll(List.of("c", "countries"), "comma-separated list of countries to download, currently supported: de, ch").withRequiredArg().describedAs("country-code").ofType(String.class).withValuesSeparatedBy(',').required();
+		final OptionSpec<String> dirOption = parser.acceptsAll(List.of("d", "directory"), "path to download the keys to. default: current directory").withRequiredArg().describedAs("path").ofType(String.class);
+		final OptionSpec<Void> helpOption = parser.acceptsAll(List.of("h", "help"), "prints this help screen").forHelp();
+
+		final OptionSet options = parser.parse(args);
+
+
+		if(options.has(helpOption)) {
+			try {
+				parser.printHelpOn(System.out);
+			} catch (IOException ignored) {
+			}
+			return;
+		}
+
+		EnumSet<DistributionType> downloadTypes = EnumSet.noneOf(DistributionType.class);
+		for (String s : options.valuesOf(countriesOption)) {
+			try {
+				downloadTypes.add(DistributionType.valueOf(s.toUpperCase()));
+			} catch (IllegalArgumentException e) {
+				logger.error("{} is not a supported county", s);
+			}
+		}
+
+		logger.info("downloading keys for: {}", downloadTypes.stream().map(DistributionType::toString).collect(Collectors.joining(",")) );
+
+
+		Path dirPath = Paths.get("");
+		if(options.has(dirOption)) {
+			String dirPathString = options.valueOf(dirOption);
+
+//			Files.isWritable(dirPathString)
+
+			dirPath = Paths.get(dirPathString);
+			logger.info("downloading to: {}", dirPath.toString());
+		}
+
+
+		KeyDownloader keyDownloader = new KeyDownloader(dirPath);
+		downloadTypes.forEach(keyDownloader::downloadCountryKeys);
+
+
+
+	}
+
+}

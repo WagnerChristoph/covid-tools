@@ -11,8 +11,9 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-public class CH_Distribution extends AbstractDistribution {
-	public static final String BASE_URL = "https://www.pt.bfs.admin.ch/v1/gaen/exposed";
+public class CH_Distribution extends AbstractDistribution implements Distribution {
+	public static final String BASE_URL = "https://www.pt.bfs.admin.ch/";
+	public static final String DEFAULT_VERSION = "v1";
 	public static final int MS_IN_SECONDS = 1000;
 
 	private static final Logger logger = LogManager.getLogger(CH_Distribution.class);

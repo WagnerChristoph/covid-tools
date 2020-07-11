@@ -4,6 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface HoursIndexable {
+public interface HoursIndexableDistribution extends Distribution {
 	List<LocalDateTime> getAvailableHours(LocalDate day);
 }

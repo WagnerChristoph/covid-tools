@@ -127,4 +127,11 @@ public class IOUtils {
 		return null;
 	}
 
+	public static class IOUtilsFactory {
+		public IOUtils create(Path keyDir) {
+			return new IOUtils(keyDir);
+		}
+	}
+
+
 }

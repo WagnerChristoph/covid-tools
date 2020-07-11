@@ -5,9 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import download.AbstractDistribution;
 import download.Callback;
-import download.DaysIndexable;
-import download.HoursIndexable;
-import okhttp3.Request;
+import download.DaysIndexableDistribution;
+import download.HoursIndexableDistribution;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.logging.log4j.LogManager;
@@ -25,12 +24,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-public class DE_Distribution extends AbstractDistribution implements DaysIndexable, HoursIndexable {
+public class DE_Distribution extends AbstractDistribution implements DaysIndexableDistribution, HoursIndexableDistribution {
 	public static final String DEFAULT_COUNTRY = "DE";
 	public static final String DEFAULT_VERSION = "v1";
 	public static final String BASE_URL = "https://svc90.main.px.t-online.de/";
 
 	private static final Logger logger = LogManager.getLogger(DE_Distribution.class);
+
 	private final String baseUrl;
 
 	public DE_Distribution() {

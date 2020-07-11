@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.zip.ZipInputStream;
 
 
-public abstract class AbstractDistribution {
+public abstract class AbstractDistribution implements Distribution {
 	private static final Logger logger = LogManager.getLogger(AbstractDistribution.class);
 	protected final OkHttpClient client;
 
@@ -31,14 +31,14 @@ public abstract class AbstractDistribution {
 	}
 
 
+	@Override
 	public Optional<Pair<LocalDate, TemporaryExposureKeyExport>> getDiagnosisKeysForDayWithDay(LocalDate date) {
 		return getDiagnosisKeysForDay(date)
 				.flatMap(tek -> Optional.of(new ImmutablePair<>(date, tek)));
 	}
 
-	public abstract Optional<TemporaryExposureKeyExport> getDiagnosisKeysForDay(LocalDate date);
 
-
+	@Override
 	public void executeRequest(String url, Callback<Response> callback) {
 		Request r = new Request.Builder()
 				.get()

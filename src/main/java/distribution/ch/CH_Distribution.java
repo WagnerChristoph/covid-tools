@@ -17,10 +17,6 @@ public class CH_Distribution extends AbstractDistribution {
 
 	private static final Logger logger = LogManager.getLogger(CH_Distribution.class);
 
-	@Override
-	protected String baseURL() {
-		return BASE_URL;
-	}
 
 	@Override
 	public Optional<TemporaryExposureKeyExport> getDiagnosisKeysForDay(LocalDate date) {
@@ -29,16 +25,5 @@ public class CH_Distribution extends AbstractDistribution {
 		logger.info("requesting diagnosis keys for {}", date.format(DateTimeFormatter.ISO_LOCAL_DATE));
 		return getKeyFile(url);
 	}
-
-
-	public static void main(String[] args) {
-		//test
-		final LocalDate date = LocalDate.of(2020, 6, 26);
-		CH_Distribution dt = new CH_Distribution();
-		final var diagnosisKeys = dt.getDiagnosisKeysForDay(date).orElseThrow();
-		System.out.println(diagnosisKeys.getKeysCount());
-	}
-
-
 
 }

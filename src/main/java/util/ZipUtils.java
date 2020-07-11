@@ -26,9 +26,6 @@ public class ZipUtils {
 		var wrapper = new Object(){ByteBuffer buffer;};
 		ZipUtils.unzip(zis, (zipEntry, content) -> {
 			if (zipEntry.getName().equals(EXPORT_BINARY_FILE_NAME)) {
-				//ignore 16-byte header
-//				ByteBuffer b = ByteBuffer.allocate(content.capacity() - 16);
-//				wrapper.buffer = b.put(content.position(16));
 				wrapper.buffer = content;
 			}
 		});

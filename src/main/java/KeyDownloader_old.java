@@ -108,30 +108,6 @@ public class KeyDownloader_old {
 	}
 
 
-//	private static JsonObject TEKExportToJson(TemporaryExposureKeyExport tekExport, LocalDate day) {
-//		JsonObject jsonObj = new JsonObject();
-//		jsonObj.addProperty("day", day.format(DateTimeFormatter.ISO_LOCAL_DATE));
-//		jsonObj.addProperty("start_date", LocalDateTime.ofEpochSecond(tekExport.getStartTimestamp(), 0, ZoneOffset.UTC)
-//													   .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-//		jsonObj.addProperty("end_date", LocalDateTime.ofEpochSecond(tekExport.getEndTimestamp(), 0, ZoneOffset.UTC)
-//													   .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-//		jsonObj.addProperty("region", tekExport.getRegion());
-//		jsonObj.addProperty("num_keys", tekExport.getKeysCount());
-//		JsonArray keys = new JsonArray();
-//		for (TemporaryExposureKey tek : tekExport.getKeysList()) {
-//			keys.add(TEKtoJson(tek));
-//		}
-//		return jsonObj;
-//	}
-//
-//
-//	private static JsonObject TEKtoJson(TemporaryExposureKey tek) {
-//		JsonObject jsonObj = new JsonObject();
-//		jsonObj.addProperty("key_data", new String(Hex.encodeHex(tek.getKeyData().asReadOnlyByteBuffer())));
-//		jsonObj.addProperty("transmission_risk_level", tek.getTransmissionRiskLevel());
-//		jsonObj.addProperty("rolling_start_interval_number", tek.getRollingStartIntervalNumber());
-//		return jsonObj;
-//	}
 
 	public static class IOFactory {
 

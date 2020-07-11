@@ -30,44 +30,15 @@ public abstract class AbstractDistribution {
 	}
 
 
-	protected  abstract String baseURL();
-
 	public Optional<Pair<LocalDate, TemporaryExposureKeyExport>> getDiagnosisKeysForDayWithDay(LocalDate date) {
 		return getDiagnosisKeysForDay(date)
 				.flatMap(tek -> Optional.of(new ImmutablePair<>(date, tek)));
-
 	}
 
 	public abstract Optional<TemporaryExposureKeyExport> getDiagnosisKeysForDay(LocalDate date);
 
-//	protected Optional<TemporaryExposureKeyExport> getKeyFile(String url) {
-//		logger.debug("requesting keys with: {}", url);
-//	 	TemporaryExposureKeyExport keys = null;
-//		Request r = new Request.Builder()
-//				.get()
-//				.url(url)
-//				.build();
-//
-//		try (Response response = client.newCall(r).execute();
-//			 ResponseBody responseBody = response.body();
-//			 ZipInputStream zis = new ZipInputStream(responseBody.byteStream())) {
-//			if (response.isSuccessful()) {
-//				logger.debug("received response with length: {}", responseBody.contentLength());
-//				 keys = getKeysFromZip(zis);
-//				 logger.info("received {} keys", keys == null ? "null" : keys.getKeysCount());
-//			}
-//			else{
-//				logger.error("error in requesting keys: {}", response.code());
-//			}
-//		} catch (IOException e) {
-//			logger.error(e.getMessage());
-//		}
-//		return Optional.ofNullable(keys);
-//	}
-
 
 	public void executeRequest(String url, Callback<Response> callback) {
-		//logger.debug("requesting: {}", url);
 		Request r = new Request.Builder()
 				.get()
 				.url(url)
@@ -82,7 +53,6 @@ public abstract class AbstractDistribution {
 				logger.error("unsuccessful response: {}", response.code());
 			}
 		} catch (IOException e) {
-//			logger.error(e.getMessage());
 			callback.onError(e);
 		}
 
@@ -129,23 +99,6 @@ public abstract class AbstractDistribution {
 	@Nullable
 	protected TemporaryExposureKeyExport getKeysFromZip(ZipInputStream zis) throws IOException {
 
-//		util.ZipUtils.unzip(zis, zipEntry -> {
-//			if (zipEntry.getName().equals(EXPORT_BINARY_FILE_NAME)) {
-//				buffer = ByteBuffer.wrap(zis.readAllBytes());
-//				//ignore 16 byte header
-//				buffer.position(16);
-//				keys = TemporaryExposureKeyExport.parseFrom(buffer);
-//		});
-
-//		util.ZipUtils.unzip(zis, (zipEntry, content) -> {
-//			if (zipEntry.getName().equals(EXPORT_BINARY_FILE_NAME)) {
-//				keysBuffer = ByteBuffer.allocate(content.capacity());
-//				clone.put(content);
-//				keysBuffer = clone;
-//				wrapper.b = content;
-//			}
-//		});
-
 		ByteBuffer binaryExportFile = ZipUtils.getExportBinaryFile(zis);
 		if(binaryExportFile == null) {
 			logger.error("could not extract binary export file from zip");
@@ -159,24 +112,6 @@ public abstract class AbstractDistribution {
 			logger.error("could not extract keys from zip file");
 			return null;
 		}
-
-//		ZipEntry zipEntry;
-//		while ((zipEntry = zis.getNextEntry()) != null) {
-//			if (zipEntry.getName().equals(EXPORT_BINARY_FILE_NAME)) {
-//				final ByteBuffer buffer = ByteBuffer.wrap(zis.readAllBytes());
-//				//ignore 16 byte header
-//				buffer.position(16);
-//				keys = TemporaryExposureKeyExport.parseFrom(buffer);
-//			}
-//			zis.closeEntry();
-//		}
-//		if(keys != null){
-//			logger.debug("found {} keys", keys.getKeysCount());
-//			return keys;
-//		}else{
-//			logger.error("could not extract keys from zip file");
-//			return null;
-//		}
 	}
 
 	public Optional<TemporaryExposureKeyExport> extractKeysFromZipFile(Path zipfile) {

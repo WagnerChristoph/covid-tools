@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class DE_Distribution extends AbstractDistribution implements DaysIndexable, HoursIndexable {
 	public static final String DEFAULT_COUNTRY = "DE";
 	public static final String DEFAULT_VERSION = "v1";
-//	public static final String BASE_URL = "https://svc90.main.px.t-online.de/version/v1/diagnosis-keys/country/DE";
 	public static final String BASE_URL = "https://svc90.main.px.t-online.de/";
 
 	private static final Logger logger = LogManager.getLogger(DE_Distribution.class);
@@ -41,10 +40,6 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 		this.baseUrl = baseUrl;
 	}
 
-	@Override
-	protected String baseURL() {
-		return BASE_URL;
-	}
 
 	private String getDefaultAvailableDaysUrl() {
 		return getAvailableDaysUrl(DEFAULT_VERSION, DEFAULT_COUNTRY);
@@ -79,7 +74,6 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 		return getAvailableDates(url).stream()
 									 .mapToInt(Integer::parseInt)
 									 .mapToObj(i -> day.atTime(i, 0))
-//									 .map(dateString -> LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE))
 									 .collect(Collectors.toList());
 	}
 

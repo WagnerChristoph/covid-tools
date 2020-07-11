@@ -18,7 +18,11 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 
 
@@ -31,12 +35,26 @@ public abstract class AbstractDistribution implements Distribution {
 	}
 
 
-	@Override
-	public Optional<Pair<LocalDate, TemporaryExposureKeyExport>> getDiagnosisKeysForDayWithDay(LocalDate date) {
+	protected Optional<Pair<LocalDate, TemporaryExposureKeyExport>> getDiagnosisKeysForDayWithDay(LocalDate date) {
 		return getDiagnosisKeysForDay(date)
 				.flatMap(tek -> Optional.of(new ImmutablePair<>(date, tek)));
 	}
 
+	@Override
+	public List<TemporaryExposureKeyExport> requestAll(Collection<LocalDate> dates) {
+		return dates.stream()
+			 .map(this::getDiagnosisKeysForDay)
+			 .flatMap(Optional::stream)
+			 .collect(Collectors.toList());
+	}
+
+	@Override
+	public Map<LocalDate, TemporaryExposureKeyExport> requestAllWithDate(Collection<LocalDate> dates) {
+		return dates.stream()
+				.map(this::getDiagnosisKeysForDayWithDay)
+				.flatMap(Optional::stream)
+				.collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+	}
 
 	@Override
 	public void executeRequest(String url, Callback<Response> callback) {
@@ -60,7 +78,7 @@ public abstract class AbstractDistribution implements Distribution {
 	}
 
 
-	public Optional<TemporaryExposureKeyExport> getKeyFile(String url) {
+	protected Optional<TemporaryExposureKeyExport> getKeyFile(String url) {
 		logger.debug("requesting keys with: {}", url);
 		var wrapper = new Object(){TemporaryExposureKeyExport keys = null;};
 

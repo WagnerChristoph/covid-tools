@@ -1,10 +1,8 @@
 package download;
 
-import joptsimple.AbstractOptionSpec;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -60,10 +58,7 @@ public class KeyDownloader {
 		logger.info("requesting {} new files", datesToRequest.size());
 
 		//request
-		final Map<LocalDate, TemporaryExposureKeyExport> newTEKs = datesToRequest.stream()
-																				 .map(distribution::getDiagnosisKeysForDayWithDay)
-																				 .flatMap(Optional::stream)
-																				 .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+		final Map<LocalDate, TemporaryExposureKeyExport> newTEKs = distribution.requestAllWithDate(datesToRequest);
 		logger.info("received {} new files", newTEKs.size());
 
 
@@ -100,7 +95,6 @@ public class KeyDownloader {
 
 
 	public static void main(String[] args) {
-		//todo config path
 		OptionParser parser = new OptionParser();
 		final OptionSpec<String> countriesOption = parser.acceptsAll(List.of("c", "countries"), "comma-separated list of countries to download, currently supported: de, ch").withRequiredArg().describedAs("country-code").ofType(String.class).withValuesSeparatedBy(',').required();
 		final OptionSpec<String> dirOption = parser.acceptsAll(List.of("d", "directory"), "path to download the keys to. default: current directory").withRequiredArg().describedAs("path").ofType(String.class);

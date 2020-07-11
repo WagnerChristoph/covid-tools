@@ -1,6 +1,5 @@
 package distribution.de;
 
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import com.google.gson.JsonArray;
 import distribution.AbstractDistributionTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -20,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 class DE_DistributionTest {
 

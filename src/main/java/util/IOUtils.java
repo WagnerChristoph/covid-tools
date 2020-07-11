@@ -1,6 +1,5 @@
 package util;
 
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.TEKExport;
@@ -22,6 +21,8 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public final class IOUtils {
 	public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;

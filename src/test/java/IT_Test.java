@@ -1,5 +1,5 @@
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import org.junit.jupiter.api.Test;
+import protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 import java.io.IOException;
 import java.io.InputStream;

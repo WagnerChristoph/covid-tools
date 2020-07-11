@@ -1,6 +1,5 @@
 package distribution;
 
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import com.google.protobuf.InvalidProtocolBufferException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,6 +19,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.zip.ZipInputStream;
+
+import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public abstract class AbstractDistribution {
 	private static final Logger logger = LogManager.getLogger(AbstractDistribution.class);

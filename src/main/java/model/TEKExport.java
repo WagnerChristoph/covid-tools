@@ -1,7 +1,5 @@
 package model;
 
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKey;
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
@@ -20,6 +18,8 @@ import java.util.stream.Collectors;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKey;
+import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public class TEKExport {
 	public static final DateTimeFormatter DEFAULT_DATE_FORMATTER = ISO_LOCAL_DATE;

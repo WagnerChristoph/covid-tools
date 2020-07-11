@@ -1,6 +1,5 @@
 package distribution.de;
 
-import app.coronawarn.server.common.protocols.external.exposurenotification.TemporaryExposureKeyExport;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public class DE_Distribution extends AbstractDistribution implements DaysIndexable, HoursIndexable {
 	public static final String DEFAULT_COUNTRY = "DE";

@@ -1,5 +1,5 @@
 import org.junit.jupiter.api.Test;
-import protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
+import protobuf.TemporaryExposureKeyExport;
 
 import java.io.IOException;
 import java.io.InputStream;

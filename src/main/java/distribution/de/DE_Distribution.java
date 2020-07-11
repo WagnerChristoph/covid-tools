@@ -12,6 +12,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import protobuf.TemporaryExposureKeyExport;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public class DE_Distribution extends AbstractDistribution implements DaysIndexable, HoursIndexable {
 	public static final String DEFAULT_COUNTRY = "DE";

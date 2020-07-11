@@ -6,6 +6,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.Nullable;
+import protobuf.TemporaryExposureKey;
+import protobuf.TemporaryExposureKeyExport;
 import util.ENIntervalNumberUtils;
 
 import java.io.IOException;
@@ -21,8 +23,6 @@ import java.util.stream.Collectors;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKey;
-import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public class TEKExport {
 	public static final DateTimeFormatter DEFAULT_DATE_FORMATTER = ISO_LOCAL_DATE;

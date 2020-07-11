@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import protobuf.TemporaryExposureKeyExport;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +23,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 public final class IOUtils {
 	public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;

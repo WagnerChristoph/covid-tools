@@ -1,6 +1,8 @@
 //from: https://developers.google.com/android/exposure-notifications/exposure-key-file-format
 syntax = "proto2";
 package protobuf;
+option java_multiple_files = true;
+
 message TemporaryExposureKeyExport {
     // Time window of keys in this batch based on arrival to server, in UTC seconds.
     optional fixed64 start_timestamp = 1;

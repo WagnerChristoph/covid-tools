@@ -8,6 +8,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import protobuf.TemporaryExposureKeyExport;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -19,7 +20,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
 
 class DE_DistributionTest {
 

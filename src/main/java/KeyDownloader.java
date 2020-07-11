@@ -2,7 +2,7 @@ import distribution.de.DE_Distribution;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import protobuf.TemporaryExposureKeyExportOuterClass.TemporaryExposureKeyExport;
+import protobuf.TemporaryExposureKeyExport;
 import util.IOUtils;
 
 import java.nio.file.Paths;
@@ -45,9 +45,9 @@ public class KeyDownloader {
 
 
 		final Map<LocalDate, TemporaryExposureKeyExport> newTEKs = availableDates.stream()
-																													  .map(DEDistribution::getDiagnosisKeysForDayWithDay)
-																													  .flatMap(Optional::stream)
-																													  .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+																				 .map(DEDistribution::getDiagnosisKeysForDayWithDay)
+																				 .flatMap(Optional::stream)
+																				 .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
 		logger.info("received {} new files", newTEKs.size());
 
 

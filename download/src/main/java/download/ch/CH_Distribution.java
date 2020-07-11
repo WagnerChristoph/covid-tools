@@ -11,6 +11,9 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+/**
+ * Queries the Swiss Corona CDN
+ */
 public class CH_Distribution extends AbstractDistribution implements Distribution {
 	public static final String BASE_URL = "https://www.pt.bfs.admin.ch/";
 	public static final String DEFAULT_VERSION = "v1";

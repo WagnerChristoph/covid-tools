@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 public class IOUtils {
 	public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+	public static final String DEFAULT_FILE_EXTENSION = "json";
 
 	private static final Logger logger = LogManager.getLogger(IOUtils.class);
 
@@ -51,7 +52,7 @@ public class IOUtils {
 	}
 
 	private static String formatFilename(LocalDate date) {
-		return String.format("%s.json", date.format(DateTimeFormatter.ISO_LOCAL_DATE));
+		return String.format("%s.%s", date.format(DateTimeFormatter.ISO_LOCAL_DATE), DEFAULT_FILE_EXTENSION);
 	}
 
 	public int persistTEKs(Map<LocalDate, TemporaryExposureKeyExport> teks) {
@@ -99,10 +100,14 @@ public class IOUtils {
 		return new HashSet<>(getExistingDates().values());
 	}
 
+	/**
+	 * Get all files in {@code keyDir} that match the file extension and try to parse the filename in a date.
+	 * @return Map of matching files and their corresponding dates.
+	 */
 	public Map<LocalDate, Path> getExistingDates() {
 		Map<LocalDate, Path> filesMap = Collections.emptyMap();
 		try (Stream<Path> list = Files.list(keyDir)) {
-			filesMap = list.filter(p -> FilenameUtils.getExtension(p.getFileName().toString()).equals("json"))
+			filesMap = list.filter(p -> FilenameUtils.getExtension(p.getFileName().toString()).equals(DEFAULT_FILE_EXTENSION))
 						   .map(p -> {
 							   final String fileName = FilenameUtils.removeExtension(p.getFileName().toString());
 							   Pair<LocalDate, Path> result = null;
@@ -122,10 +127,6 @@ public class IOUtils {
 		return filesMap;
 	}
 
-	//todo
-	public Optional<Path> getSavedFileForDate(LocalDate date) {
-		return null;
-	}
 
 	public static class IOUtilsFactory {
 		public IOUtils create(Path keyDir) {

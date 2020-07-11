@@ -30,6 +30,7 @@ public class KeyDownloader {
 	private final IOUtilsFactory ioUtilsFactory;
 
 
+	//for testing mostly
 	public KeyDownloader(DistributionFactory distributionFactory, IOUtilsFactory ioUtilsFactory) {
 		this.distributionFactory = distributionFactory;
 		this.ioUtilsFactory = ioUtilsFactory;
@@ -42,14 +43,17 @@ public class KeyDownloader {
 	}
 
 
-
 	public void downloadCountryKeys(DistributionType type){
 		logger.info("downloading keys for {}", type.toString());
 		downloadKeys(distributionFactory.getDistribution(type), ioUtilsFactory.create(baseKeyDir.resolve(type.toString().toLowerCase())));
 	}
 
 
-
+	/**
+	 * Downloads key files from specified {@code Distribution} returned by {@code getDateToRequest()} and saves them with specified {@code IOUtils}.
+	 * @param distribution The distribution to download the keys from.
+	 * @param ioUtils The IOUtils to save the newly downloaded key files.
+	 */
 	public void downloadKeys(@NotNull Distribution distribution, @NotNull IOUtils ioUtils) {
 		final Set<LocalDate> existingDates = ioUtils.getExistingDates().keySet();
 		logger.info("found {} existing files", existingDates.size());
@@ -67,6 +71,15 @@ public class KeyDownloader {
 
 	}
 
+	/**
+	 * Get the dates to request depending on already existing key files.
+	 * If {@code distribution} is {@code DaysIndexableDistribution}, then the available files on the server are requested and the missing/not present dates are returned.
+	 * Else the dates beginning  the day after the last existing key file until yesterday are returned. In case of an error or no existing files, the last 14 days are returned.
+	 *
+	 * @param distribution The distribution to download the keys from.
+	 * @param existingDates Set of dates for which keys are already present.
+	 * @return Set of dates to request.
+	 */
 	@NotNull
 	private Set<LocalDate> getDateToRequest(Distribution distribution, Set<LocalDate> existingDates) {
 		if(distribution instanceof DaysIndexableDistribution) {

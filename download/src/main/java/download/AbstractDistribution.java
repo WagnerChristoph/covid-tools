@@ -78,6 +78,11 @@ public abstract class AbstractDistribution implements Distribution {
 	}
 
 
+	/**
+	 * Actually executing the request.
+	 * @param url Url to request.
+	 * @return If successful, the requested {@code TemporaryExposureKeyExport}
+	 */
 	protected Optional<TemporaryExposureKeyExport> getKeyFile(String url) {
 		logger.debug("requesting keys with: {}", url);
 		var wrapper = new Object(){TemporaryExposureKeyExport keys = null;};

@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+/**
+ * Queries the German Corona CDN
+ */
 public class DE_Distribution extends AbstractDistribution implements DaysIndexableDistribution, HoursIndexableDistribution {
 	public static final String DEFAULT_COUNTRY = "DE";
 	public static final String DEFAULT_VERSION = "v1";

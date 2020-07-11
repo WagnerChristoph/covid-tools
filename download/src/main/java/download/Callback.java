@@ -1,4 +1,4 @@
-package distribution;
+package download;
 
 public interface Callback<T> {
 	void onSuccess(T item);

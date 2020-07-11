@@ -1,4 +1,4 @@
-package distribution;
+package download;
 
 import okhttp3.mockwebserver.MockResponse;
 import okio.Buffer;

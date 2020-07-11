@@ -1,5 +1,5 @@
-import distribution.AbstractDistribution;
-import distribution.de.DE_Distribution;
+import download.AbstractDistribution;
+import download.de.DE_Distribution;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

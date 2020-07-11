@@ -1,4 +1,4 @@
-package distribution;
+package download;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import okhttp3.OkHttpClient;

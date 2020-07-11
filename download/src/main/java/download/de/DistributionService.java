@@ -1,4 +1,4 @@
-package distribution.de;
+package download.de;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;

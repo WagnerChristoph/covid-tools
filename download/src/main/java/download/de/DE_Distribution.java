@@ -1,12 +1,12 @@
-package distribution.de;
+package download.de;
 
 import com.google.common.collect.Streams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import distribution.AbstractDistribution;
-import distribution.Callback;
-import distribution.DaysIndexable;
-import distribution.HoursIndexable;
+import download.AbstractDistribution;
+import download.Callback;
+import download.DaysIndexable;
+import download.HoursIndexable;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;

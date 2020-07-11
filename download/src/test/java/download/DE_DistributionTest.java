@@ -1,7 +1,8 @@
-package distribution.de;
+package download;
 
 import com.google.gson.JsonArray;
-import distribution.AbstractDistributionTest;
+import download.AbstractDistributionTest;
+import download.de.DE_Distribution;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -28,7 +29,7 @@ class DE_DistributionTest {
 	public static final LocalDateTime EXAMPLE_DATE_TIME = LocalDateTime.of(2020, 9, 8, 4, 0);
 
 	private  MockWebServer mockServer;
-	private  DE_Distribution dist;
+	private DE_Distribution dist;
 
 
 	@BeforeEach

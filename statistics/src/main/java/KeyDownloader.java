@@ -1,4 +1,4 @@
-import distribution.de.DE_Distribution;
+import download.de.DE_Distribution;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

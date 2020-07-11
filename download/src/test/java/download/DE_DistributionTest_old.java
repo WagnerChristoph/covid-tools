@@ -1,4 +1,6 @@
-import distribution.de.DE_Distribution;
+package download;
+
+import download.de.DE_Distribution;
 import org.junit.jupiter.api.Test;
 import protobuf.TemporaryExposureKey;
 import protobuf.TemporaryExposureKeyExport;
@@ -23,7 +25,8 @@ import java.util.stream.Collectors;
 import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DE_DistributionTest {
+class DE_DistributionTest_old {
+
 
 	//todo clean-up
 	private final static Path defaultKeyExportFile = Paths.get("");

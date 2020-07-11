@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ../src/main/protobuf || exit
+cd ../download/src/main/protobuf || exit
 protoc --java_out=../java/ *.proto

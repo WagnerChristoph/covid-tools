@@ -1,6 +1,6 @@
-package distribution.ch;
+package download.ch;
 
-import distribution.AbstractDistribution;
+import download.AbstractDistribution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import protobuf.TemporaryExposureKeyExport;

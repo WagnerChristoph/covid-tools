@@ -33,14 +33,13 @@ public class DE_Distribution extends AbstractDistribution implements DaysIndexab
 
 	private static final Logger logger = LogManager.getLogger(DE_Distribution.class);
 
-	private final String baseUrl;
 
 	public DE_Distribution() {
 		this(BASE_URL);
 	}
 
 	public DE_Distribution(String baseUrl) {
-		this.baseUrl = baseUrl;
+		super(baseUrl);
 	}
 
 

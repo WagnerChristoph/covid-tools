@@ -1,0 +1,41 @@
+{
+  "full_14_batch": {
+    "interval": 2655504,
+    "batch_file_paths": ["/exposures/at/1594581300/batch_full14-2655504-1.zip"]
+  },
+  "full_7_batch": {
+    "interval": 2656512,
+    "batch_file_paths": ["/exposures/at/1594581300/batch_full7-2656512-1.zip"]
+  },
+  "daily_batches": [
+    {
+      "interval": 2656512,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2656512-1.zip"]
+    },
+    {
+      "interval": 2656656,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2656656-1.zip"]
+    },
+    {
+      "interval": 2656800,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2656800-1.zip"]
+    },
+    {
+      "interval": 2656944,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2656944-1.zip"]
+    },
+    {
+      "interval": 2657088,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2657088-1.zip"]
+    },
+    {
+      "interval": 2657232,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2657232-1.zip"]
+    },
+    {
+      "interval": 2657376,
+      "batch_file_paths": ["/exposures/at/1594581300/batch-2657376-1.zip"]
+    },
+    { "interval": 2657520, "batch_file_paths": [] }
+  ]
+}

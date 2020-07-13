@@ -21,14 +21,13 @@ public class CH_Distribution extends AbstractDistribution implements Distributio
 
 	private static final Logger logger = LogManager.getLogger(CH_Distribution.class);
 
-	private final String baseUrl;
 
 	public CH_Distribution() {
-		this.baseUrl = BASE_URL;
+		this(BASE_URL);
 	}
 
 	public CH_Distribution(String baseUrl) {
-		this.baseUrl = baseUrl;
+		super(baseUrl);
 	}
 
 	private String buildDefaultBaseUrl() {

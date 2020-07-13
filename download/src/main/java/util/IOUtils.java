@@ -120,7 +120,8 @@ public class IOUtils {
 						   })
 						   .flatMap(Optional::stream)
 						   .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-			logger.debug("found existing files: {}", filesMap.keySet().stream().map(DEFAULT_DATE_TIME_FORMATTER::format).collect(Collectors.joining(",")));
+			logger.info("found {} existing files in {}",filesMap.size() , keyDir.toString());
+			logger.debug("existing files: {}", filesMap.keySet().stream().map(DEFAULT_DATE_TIME_FORMATTER::format).collect(Collectors.joining(",")));
 		} catch (IOException e) {
 			logger.error("error reading files: {}", e.getMessage());
 		}

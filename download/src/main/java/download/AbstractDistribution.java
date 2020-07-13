@@ -29,9 +29,11 @@ import java.util.zip.ZipInputStream;
 public abstract class AbstractDistribution implements Distribution {
 	private static final Logger logger = LogManager.getLogger(AbstractDistribution.class);
 	protected final OkHttpClient client;
+	protected final String baseUrl;
 
-	public AbstractDistribution() {
+	public AbstractDistribution(String baseUrl) {
 		this.client = new OkHttpClient();
+		this.baseUrl = baseUrl;
 	}
 
 

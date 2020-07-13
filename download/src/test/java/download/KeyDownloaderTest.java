@@ -122,9 +122,9 @@ class KeyDownloaderTest {
 		LocalDate begin = LocalDate.now();
 		int numNewRequests = 5;
 
-		//oldest existing file is now - numNewRequests days old, so expect numNewRequests new requests
+		//oldest existing file is (now - numNewRequests) days old, so expect numNewRequests new requests
 		Map<LocalDate, Path> map = new HashMap<>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 1; i < 5; i++) {
 			//also, assure that existing dates are correctly ordered (and latest existing file is used)
 			map.put(begin.minusDays(numNewRequests + i), Paths.get(""));
 		}

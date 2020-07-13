@@ -83,25 +83,31 @@ public class KeyDownloader {
 	@NotNull
 	private Set<LocalDate> getDateToRequest(Distribution distribution, Set<LocalDate> existingDates) {
 		if(distribution instanceof DaysIndexableDistribution) {
-		//if we can list the available dates, get them
-		final Set<LocalDate> availableDates = new HashSet<>(((DaysIndexableDistribution) distribution).getAvailableDays());
-		logger.info("found {} available dates on server", availableDates.size());
+			//if we can list the available dates, get them
+			final Set<LocalDate> availableDates = new HashSet<>(((DaysIndexableDistribution) distribution).getAvailableDays());
+			logger.info("found {} available dates on server", availableDates.size());
 
-		availableDates.removeAll(existingDates);
-		return availableDates;
+			availableDates.removeAll(existingDates);
+			return availableDates;
 
 		}else {
 			//request from latest existing date on or alternatively last 14 days
 			final LocalDate startingDate = existingDates.stream()
-														  .max(naturalOrder())
-																					//exclusive
-														  .orElse(LocalDate.now().minusDays(14));
+														.max(naturalOrder())
+														.map(d-> {
+															logger.debug("oldest found date: " + d.format(DateTimeFormatter.ISO_LOCAL_DATE));
+															return d;
+														})
+														//don't include last existing date
+														.map(date -> date.plusDays(1))
+																				//exclusive
+														.orElse(LocalDate.now().minusDays(14));
 			logger.info("requesting new files from {} on", startingDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
 
 			return startingDate
-											//dont include today
-										   .datesUntil(LocalDate.now())
-										   .collect(Collectors.toSet());
+					//dont include today
+					.datesUntil(LocalDate.now())
+					.collect(Collectors.toSet());
 		}
 	}
 
